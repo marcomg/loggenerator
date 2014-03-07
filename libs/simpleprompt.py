@@ -37,3 +37,18 @@ def cprint(text, color, bold = 0):
     else:
         sColor = ''
     print(sColor + text + '\033[0m')
+
+# Put the text in a corner of #
+def cornerText(lines):
+    lines = lines.split("\n")
+    lengs = []
+    for line in lines:
+        lengs.append(len(line))
+    maxlen = max(lengs)
+    text = '##' + '#'*maxlen + '##' + "\n"
+    for line in lines:
+        tlen = len(line)
+        spaces = maxlen - tlen
+        text += '# ' + line + ' '*spaces + ' #' + "\n"
+    text += '##' + '#'*maxlen + '##'
+    return text

@@ -9,25 +9,12 @@ def _getRecoursiveFileList(rootdir):
             fileList.append(os.path.join(root,file))
     return fileList;
 
-def _frameText(lines):
-    lines = lines.split("\n")
-    lengs = []
-    for line in lines:
-        lengs.append(len(line))
-    maxlen = max(lengs)
-    text = '##' + '#'*maxlen + '##' + "\n"
-    for line in lines:
-        tlen = len(line)
-        spaces = maxlen - tlen
-        text += '# ' + line + ' '*spaces + ' #' + "\n"
-    text += '##' + '#'*maxlen + '##'
-    return text
-
 log = ''
 
 def addTextInFrame(text):
     global log
-    log += _frameText(text) + "\n"
+    leng = len(text)
+    log += "\n" + text + "\n" + '-' * leng + "\n"
 
 def addCommand(command, h = True):
     if h:
