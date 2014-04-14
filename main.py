@@ -88,7 +88,7 @@ if problem in [1, 2, 3, 4, 5, 6, 7]:
     loggenerator.addDirList('/usr/local/lib/firmware')
     loggenerator.addDirList('/lib/firmware')
     loggenerator.addDirList('/run/udev/firmware-missing')
-    ## _extpack
+    ## _extpack #TODO non fatto in quanto metodo da migliorare
 # 1 problemi relativi alle connessioni di rete
 if problem == 1:
     loggenerator.addFile('/etc/network/interfaces')
@@ -106,8 +106,8 @@ if problem == 1:
     loggenerator.addFile('/etc/resolv.conf')
     loggenerator.isPackageInstalled('DHCP')
     loggenerator.addFile('/etc/dhclient.conf')
-    #_demone "/usr/sbin/NetworkManager" "Network Manager"
-    #_demone "/usr/sbin/wicd" "Wicd"
+    loggenerator.isDeamonRunning('network-manager')
+    loggenerator.isDeamonRunning('wicd')
 # 2 problemi video
 elif problem == 2:
     loggenerator.addFile('/etc/X11/xorg.conf')

@@ -17,11 +17,12 @@ def addTextInFrame(text):
     log += "\n" + text + "\n" + '-' * leng + "\n"
 
 def addCommand(command, h = True):
+    trash = open(os.devnull, 'w') # file to put standard error
     if h:
         addTextInFrame('Command: ' + command)
     global log
     try:
-        out = subprocess.check_output(command, shell=True, universal_newlines=True)
+        out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
         log += str(out)
     except subprocess.CalledProcessError:
         pass
@@ -45,6 +46,10 @@ def addDirList(directory):
 
 def isPackageInstalled(package):
     addCommand('dpkg -l | grep -i "%s"' % (package))
+
+def isDeamonRunning(deamon):
+    addTextInFrame('Deamon: ' + deamon)
+    addCommand('invoke-rc.d "%s" status' % (deamon), False)
 
 def logWrite(f):
     global log
