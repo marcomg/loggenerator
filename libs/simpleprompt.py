@@ -17,11 +17,10 @@ def boolQuestionY(question):
         return True
 
 # Make a multi question question (return the number of q.) if possible select 0 to exit
-def multiChoose(questions, finalquestion = 'Select an item using a number: '):
-    i = -1
-    for question in questions:
-        i += 1
-        print('[' + str(i) + '] ' + question)
+def multiChoose(questions, num, finalquestion):
+    for i in range(1,num+1):
+        print('[' + str(i) + '] ' + questions[i-1])    
+    print('[0] Esci')
     result = input(finalquestion)
     try:
         return int(result)

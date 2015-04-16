@@ -38,14 +38,14 @@ if getpass.getuser() != 'root':
 
 # Seleziono il tipo di problema
 problem = simpleprompt.multiChoose(
-    ['Esci;',
-    'problemi relativi alle connessioni di rete;',
-    'problemi video;',
-    'problemi audio;',
-    'problemi di gestione dei pacchetti (APT);',
-    'problemi di mount/unmount;',
-    'problemi di funzionamento del touchpad;',
-    'altro tipo di problemi.'])
+    ['Problemi relativi alle connessioni di rete',
+    'Problemi video',
+    'Problemi audio',
+    'Problemi di gestione dei pacchetti (APT)',
+    'Problemi di mount/unmount',
+    'Problemi di funzionamento del touchpad',
+    'Altro tipo di problema'] , 7, 'Select an item using a number: ')
+
 # Genero i log
 # 0 esci
 if problem == 0:
