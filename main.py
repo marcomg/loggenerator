@@ -60,7 +60,7 @@ if problem in [1, 2, 3, 4, 5, 6, 7]:
     loggenerator.addCommand('/usr/bin/lspci -knn')
     loggenerator.addCommand('/usr/bin/lsusb')
     loggenerator.addFile('/etc/apt/sources.list')
-    loggenerator.addDir('/etc/apt/sources.lis.d/')
+    loggenerator.addDir('/etc/apt/sources.list.d/')
     loggenerator.addCommand('/sbin/fdisk -l')
     loggenerator.addCommand('/bin/mount')
     loggenerator.addCommand('/bin/df')
