@@ -7,44 +7,28 @@ import time
 
 # Personal library
 sys.path.append('libs') # this line only if not pakaged
+import programStrings
 import pastedebian
 import simpleprompt
 import loggenerator
 
 # Intro
-print('''*********************************************************************************
-*  www.debianizzati.org                                                         *
-*                                                                               *
-*  Script che crea un log utile alla risoluzione dei problemi più comuni        *
-*  Sotto licenza GPLv3                                                          *
-*                                                                               *
-*********************************************************************************''')
+print(programStrings.programIntroString)
 
 # Chiedo conferma
-print('''-- Lo script richiede i permessi di root per essere eseguito
--- per inviare il log su paste.debian.net è necessaria una connessione ad internet,
--- l'invio del log a paste.debian.net avverrà solo dopo esplicito consenso.
--- Verrà creato un file contenente l'output di questo script e
--- verrà creato un file in formato compresso da inviare al forum.
--- I seguenti file verranno creati nella stessa directory dove verrà eseguito lo script
--- se i file di log esistono verranno sovrascritti.''')
+print(programStrings.programAdviceStrings)
 if not simpleprompt.boolQuestionY('Continuare?'):
     exit()
 
 # Controllo di essere root
-if getpass.getuser() != 'root':
-    print('Lo script deve essere lanciato da root.')
-    exit()
+#if getpass.getuser() != 'root':
+#    print('Lo script deve essere lanciato da root.')
+#    exit()
 
 # Seleziono il tipo di problema
-problem = simpleprompt.multiChoose(
-    ['Problemi relativi alle connessioni di rete',
-    'Problemi video',
-    'Problemi audio',
-    'Problemi di gestione dei pacchetti (APT)',
-    'Problemi di mount/unmount',
-    'Problemi di funzionamento del touchpad',
-    'Altro tipo di problema'] , 7, 'Select an item using a number: ')
+problem = simpleprompt.multiChoose(programStrings.menuItemsStrings,
+                                   len(programStrings.menuItemsStrings),
+                                   programStrings.menuItemsQuestion)
 
 # Genero i log
 # 0 esci
