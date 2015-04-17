@@ -60,7 +60,7 @@ if problem in [1, 2, 3, 4, 5, 6, 7]:
     loggenerator.addCommand('/usr/bin/lspci -knn')
     loggenerator.addCommand('/usr/bin/lsusb')
     loggenerator.addFile('/etc/apt/sources.list')
-    loggenerator.addDir('/etc/apt/sources.list.d/')
+    loggenerator.addDir('/etc/apt/sources.lis.d/')
     loggenerator.addCommand('/sbin/fdisk -l')
     loggenerator.addCommand('/bin/mount')
     loggenerator.addCommand('/bin/df')
@@ -147,9 +147,13 @@ elif problem == 6:
 
 
 # Scrivo i logs
-f = open('logs.log', 'w')
+filename = 'log-' + time.strftime("%d%m%Y-%H%M%S")
+f = open(filename, 'w')
 loggenerator.logWrite(f)
 f.close()
+
+#set log permissions to 666 
+os.chmod(filename, 0o666)
 
 # Invio i logs a paste.debian.net
 if simpleprompt.boolQuestion('Vuoi inviare i logs su paste.debian.net?'):
