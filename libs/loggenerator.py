@@ -51,6 +51,5 @@ def isDeamonRunning(deamon):
     addTextInFrame('Deamon: ' + deamon)
     addCommand('invoke-rc.d "%s" status' % (deamon), False)
 
-def logWrite(f):
-    global log
-    f.write(log)
+def getLogFile():
+    return log

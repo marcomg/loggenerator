@@ -149,7 +149,7 @@ elif problem == 6:
 # Scrivo i logs
 filename = 'log-' + time.strftime("%d%m%Y-%H%M%S")
 f = open(filename, 'w')
-loggenerator.logWrite(f)
+f.write(loggenerator.getLogFile())
 f.close()
 
 #set log permissions to 666 
