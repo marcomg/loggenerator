@@ -6,7 +6,7 @@ import getpass
 import time
 
 # Personal library
-sys.path.append('libs') # this line only if not pakaged
+sys.path.append('libs') # questa linea solo se non pacchettizato
 import programStrings
 import pastedebian
 import simpleprompt
