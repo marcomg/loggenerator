@@ -11,6 +11,7 @@ import programStrings
 import pastedebian
 import simpleprompt
 import loggenerator
+import fileHandler
 
 # Intro
 print(programStrings.programIntroString)
@@ -34,8 +35,9 @@ problem = simpleprompt.multiChoose(programStrings.menuItemsStrings,
 # 0 esci
 if problem == 0:
     exit()
+    
 # 7 commons (da eseguire sempre tranne che allo 0) e altro tipo di problemi
-if problem in [1, 2, 3, 4, 5, 6, 7]:
+if problem in [1, (len(programStrings.menuItemsStrings))-1]:
     loggenerator.addTextInFrame('Log creato ' + time.ctime())
     loggenerator.addTextInFrame('Produttore:')
     loggenerator.addFile('/sys/class/dmi/id/sys_vendor')
@@ -146,14 +148,12 @@ elif problem == 6:
     loggenerator.addCommand('/usr/bin/synclient -l')
 
 
-# Scrivo i logs
-filename = 'log-' + time.strftime("%d%m%Y-%H%M%S")
-f = open(filename, 'w')
-f.write(loggenerator.getLogFile())
-f.close()
+# Log file name based on the current date
+fileLogName = 'log-' + time.strftime("%d%m%Y-%H%M%S")
 
-#set log permissions to 666 
-os.chmod(filename, 0o666)
+# myfile is an object of the class "fileOps" in fileHandler(.py) module
+myfile = fileHandler.fileOps(fileLogName)
+myfile.go()
 
 # Invio i logs a paste.debian.net
 if simpleprompt.boolQuestion('Vuoi inviare i logs su paste.debian.net?'):
