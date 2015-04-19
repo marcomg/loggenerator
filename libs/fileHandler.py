@@ -20,7 +20,7 @@ class fileOps():
     
     # Set permissions to 666
     def chmod(self):
-        os.chmod(self.filename, 0o666)
+        os.chmod(self.filename, 666)
         
     def go(self):
         self.open()
