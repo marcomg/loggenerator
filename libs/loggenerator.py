@@ -11,6 +11,20 @@ def _getRecoursiveFileList(rootdir):
 
 log = ''
 
+# Checks if a file exists
+# Returns 1 if a file exists, 0 otherwise
+def ifFileExists(filename):
+    if os.path.isfile(filename):
+        return 1
+    return 0
+
+# Checks if a directory exists
+# Returns 1 if a directory exists, 0 otherwise
+def ifDirExists(dirname):
+    if os.path.isdir(dirname):
+        return 1
+    return 0
+
 def addTextInFrame(text):
     global log
     leng = len(text)
@@ -29,16 +43,18 @@ def addCommand(command, h = True):
 
 def addFile(fileP):
     addTextInFrame('File: ' + fileP)
-    addCommand('cat ' + fileP, False)
+    if ifFileExists(fileP):
+        addCommand('cat ' + fileP, False)
 
 def addDir(directory):
-    addTextInFrame('Direcotry: ' + directory)
-    files = _getRecoursiveFileList(directory)
-    for myfile in files:
-        addFile(myfile)
+    addTextInFrame('Directory: ' + directory)
+    if ifDirExists(dirname):
+        files = _getRecoursiveFileList(directory)
+        for myfile in files:
+            addFile(myfile)
 
 def addDirList(directory):
-    addTextInFrame('Direcotry list: ' + directory)
+    addTextInFrame('Directory list: ' + directory)
     global log
     files = _getRecoursiveFileList(directory)
     for tfile in files:
