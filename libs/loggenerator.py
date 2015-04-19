@@ -48,7 +48,7 @@ def addFile(fileP):
 
 def addDir(directory):
     addTextInFrame('Directory: ' + directory)
-    if ifDirExists(dirname):
+    if ifDirExists(directory):
         files = _getRecoursiveFileList(directory)
         for myfile in files:
             addFile(myfile)
