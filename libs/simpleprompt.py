@@ -17,12 +17,14 @@ def boolQuestionY(question):
         return True
 
 # Make a multi question question (return the number of q.) if possible select 0 to exit
-def multiChoose(questions, dim, finalquestion):
+def multiChoose(questions, finalquestion):
+    dim = len(questions)
     for i in range(1, dim):
         print('[' + str(i) + '] ' + questions[i-1])    
     print('[0] ' + questions[dim-1])
     result = input(finalquestion)
     try:
+        print(result)
         return int(result)
     except:
         return 0

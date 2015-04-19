@@ -22,13 +22,12 @@ if not simpleprompt.boolQuestionY('Continuare?'):
     exit()
 
 # Controllo di essere root
-#if getpass.getuser() != 'root':
-#    print('Lo script deve essere lanciato da root.')
-#    exit()
+if getpass.getuser() != 'root':
+    print('Errore: lo script deve essere lanciato da root.')
+    exit()
 
 # Seleziono il tipo di problema
 problem = simpleprompt.multiChoose(programStrings.menuItemsStrings,
-                                   len(programStrings.menuItemsStrings),
                                    programStrings.menuItemsQuestion)
 
 # Genero i log
