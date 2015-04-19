@@ -159,7 +159,7 @@ myfile.go()
 if simpleprompt.boolQuestion('Vuoi inviare i logs su paste.debian.net?'):
     print('Invio in corso, attendere...')
     links = []
-    f = open('logs.log', 'r')
+    f = open(fileLogName, 'r')
     while True:
         tmp = f.readlines(100 * 1024) # 100 KiB
         tmp = ''.join(tmp)
