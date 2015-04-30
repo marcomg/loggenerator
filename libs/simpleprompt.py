@@ -20,8 +20,8 @@ def boolQuestionY(question):
 def multiChoose(questions, finalquestion):
     dim = len(questions)
     for i in range(1, dim):
-        print('[' + str(i) + '] ' + questions[i-1])    
-    print('[0] ' + questions[dim-1])
+        print('[' + str(i) + '] ' + questions[i - 1])    
+    print('[0] ' + questions[dim - 1])
     result = input(finalquestion)
     try:
         print(result)
@@ -30,7 +30,7 @@ def multiChoose(questions, finalquestion):
         return 0
 
 # Print using colors
-def cprint(text, color, bold = 0):
+def cprint(text, color, bold=0):
     if color == 'red':
         sColor = '\033[01;31m'
     elif color == 'green':
@@ -46,10 +46,10 @@ def cornerText(lines):
     for line in lines:
         lengs.append(len(line))
     maxlen = max(lengs)
-    text = '##' + '#'*maxlen + '##' + "\n"
+    text = '##' + '#' * maxlen + '##' + "\n"
     for line in lines:
         tlen = len(line)
         spaces = maxlen - tlen
-        text += '# ' + line + ' '*spaces + ' #' + "\n"
-    text += '##' + '#'*maxlen + '##'
+        text += '# ' + line + ' ' * spaces + ' #' + "\n"
+    text += '##' + '#' * maxlen + '##'
     return text

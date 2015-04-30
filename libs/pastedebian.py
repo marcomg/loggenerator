@@ -21,9 +21,9 @@ protocol = 'http://'
 url = 'http://paste.debian.net'
 server = xmlrpc.client.ServerProxy('http://paste.debian.net/server.pl')
 
-def addPaste(pastetext, name = '', expire = -1, lang = '', hidden = 0):
+def addPaste(pastetext, name='', expire=-1, lang='', hidden=0):
     result = server.paste.addPaste(pastetext, name, expire, lang, hidden)
-    #print(result)
+    # print(result)
     # If there is an error
     if result['rc'] != 0:
         raise PasteError('There has been an error during the upload process :(, return status ' + str(result['rc']))

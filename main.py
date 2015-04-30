@@ -6,7 +6,7 @@ import getpass
 import time
 
 # Personal library
-sys.path.append('libs') # questa linea solo se non pacchettizato
+sys.path.append('libs')  # questa linea solo se non pacchettizato
 import programStrings
 import pastedebian
 import simpleprompt
@@ -36,7 +36,7 @@ if problem == 0:
     exit()
     
 # 7 commons (da eseguire sempre tranne che allo 0) e altro tipo di problemi
-if problem in [1, (len(programStrings.menuItemsStrings))-1]:
+if problem in [1, (len(programStrings.menuItemsStrings)) - 1]:
     loggenerator.addTextInFrame('Log creato ' + time.ctime())
     loggenerator.addTextInFrame('Produttore:')
     loggenerator.addFile('/sys/class/dmi/id/sys_vendor')
@@ -48,7 +48,7 @@ if problem in [1, (len(programStrings.menuItemsStrings))-1]:
     loggenerator.addFile('/sys/class/dmi/id/bios_version')
     loggenerator.addCommand('/bin/uname -a')
     loggenerator.addFile('/etc/debian_version')
-    #de_wm
+    # de_wm
     loggenerator.addCommand('kde4-config --version')
     loggenerator.addCommand('gnome-shell --version')
     loggenerator.addCommand('xfce4-about | head -n1 | cut -d " " -f2')
@@ -73,7 +73,7 @@ if problem in [1, (len(programStrings.menuItemsStrings))-1]:
     loggenerator.addDirList('/usr/local/lib/firmware')
     loggenerator.addDirList('/lib/firmware')
     loggenerator.addDirList('/run/udev/firmware-missing')
-    ## _extpack #TODO non fatto in quanto metodo da migliorare
+    # # _extpack #TODO non fatto in quanto metodo da migliorare
 # 1 problemi relativi alle connessioni di rete
 if problem == 1:
     loggenerator.addFile('/etc/network/interfaces')
@@ -81,7 +81,7 @@ if problem == 1:
     loggenerator.addCommand('/sbin/ifconfig')
     loggenerator.addCommand('/sbin/ifconfig -a')
     loggenerator.addCommand('/usr/sbin/rfkill list all')
-    loggenerator.addCommand('/bin/ping -c3 8.8.8.8') #DNS di Google 8.8.8.8
+    loggenerator.addCommand('/bin/ping -c3 8.8.8.8')  # DNS di Google 8.8.8.8
     loggenerator.addCommand('/bin/ip addr')
     loggenerator.addCommand('/bin/ip route list')
     loggenerator.addCommand('/sbin/iwconfig')
@@ -160,12 +160,12 @@ if simpleprompt.boolQuestion('Vuoi inviare i logs su paste.debian.net?'):
     links = []
     f = open(fileLogName, 'r')
     while True:
-        tmp = f.readlines(100 * 1024) # 100 KiB
+        tmp = f.readlines(100 * 1024)  # 100 KiB
         tmp = ''.join(tmp)
         if tmp == '':
             break
         else:
-            links.append(pastedebian.addPaste(tmp, expire = 60*60*24*30)['view_url'])# i links scadono dopo un mese
+            links.append(pastedebian.addPaste(tmp, expire=60 * 60 * 24 * 30)['view_url'])  # i links scadono dopo un mese
     print('invio completato. I links sono:')
     for link in links:
         print(link)
