@@ -5,33 +5,33 @@ import os.path
 def _getRecoursiveFileList(rootdir):
     fileList = []
     for root, subFolders, files in os.walk(rootdir):
-        for file in files:
-            fileList.append(os.path.join(root,file))
+        for f in files:
+            fileList.append(os.path.join(root, f))
     return fileList;
-
-log = ''
 
 # Checks if a file exists
 # Returns 1 if a file exists, 0 otherwise
-def ifFileExists(filename):
+def _ifFileExists(filename):
     if os.path.isfile(filename):
         return 1
     return 0
 
 # Checks if a directory exists
 # Returns 1 if a directory exists, 0 otherwise
-def ifDirExists(dirname):
+def _ifDirExists(dirname):
     if os.path.isdir(dirname):
         return 1
     return 0
+
+log = ''
 
 def addTextInFrame(text):
     global log
     leng = len(text)
     log += "\n" + text + "\n" + '-' * leng + "\n"
 
-def addCommand(command, h = True):
-    trash = open(os.devnull, 'w') # file to put standard error
+def addCommand(command, h=True):
+    trash = open(os.devnull, 'w')  # file to put standard error
     if h:
         addTextInFrame('Command: ' + command)
     global log
@@ -43,12 +43,12 @@ def addCommand(command, h = True):
 
 def addFile(fileP):
     addTextInFrame('File: ' + fileP)
-    if ifFileExists(fileP):
+    if _ifFileExists(fileP):
         addCommand('cat ' + fileP, False)
 
 def addDir(directory):
     addTextInFrame('Directory: ' + directory)
-    if ifDirExists(directory):
+    if _ifDirExists(directory):
         files = _getRecoursiveFileList(directory)
         for myfile in files:
             addFile(myfile)
