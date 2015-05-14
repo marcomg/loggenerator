@@ -124,7 +124,7 @@ ALSA prelevabile all'indirizzo: ''' + alsaurl)
 elif problem == 4:
     loggenerator.addCommand('dpkg --print-architecture')
     loggenerator.addCommand('apt-get update')
-    loggenerator.addCommand('apt-ge -s -y upgrade')
+    loggenerator.addCommand('apt-get -s -y upgrade')
     loggenerator.addCommand('apt-get -s -y dist-upgrade')
     loggenerator.addCommand('apt-get -s -y -f install')
     loggenerator.addCommand('apt-get -s -y autoremove')

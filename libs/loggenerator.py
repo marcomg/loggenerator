@@ -56,10 +56,9 @@ def addCommand(command, h=True):
     global log
     try:
         command1 = stripOptions(command)
-        print(command1)
-        print(shutil.which(command1))
-        out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
-        log += str(out)
+        if shutil.which(command1) != 'None':
+            out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
+            log += str(out)
     except subprocess.CalledProcessError:
         pass
 
