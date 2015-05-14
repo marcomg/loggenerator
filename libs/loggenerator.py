@@ -1,6 +1,8 @@
 import subprocess
 import os
 import os.path
+import re
+import shutil
 
 def _getRecoursiveFileList(rootdir):
     fileList = []
@@ -23,6 +25,22 @@ def _ifDirExists(dirname):
         return 1
     return 0
 
+# Deletes options (if any) from a command
+# Returns only command 
+def stripOptions(string):
+    command = re.search('(.*) +', string)
+    return command.group(0)
+
+
+# Output message based on the second parameter
+def printOnScreen(string, type):
+    if type == 'f':
+        print('File: ' + string)
+    elif type == 'd':
+        print('Directory: ' + string)
+    elif type == 'c':
+        print('Comando: ' + string) 
+
 log = ''
 
 def addTextInFrame(text):
@@ -31,22 +49,31 @@ def addTextInFrame(text):
     log += "\n" + text + "\n" + '-' * leng + "\n"
 
 def addCommand(command, h=True):
+    printOnScreen(command, 'c')
     trash = open(os.devnull, 'w')  # file to put standard error
     if h:
         addTextInFrame('Command: ' + command)
     global log
     try:
+        command1 = stripOptions(command)
+        print(command1)
+        print(shutil.which(command1))
         out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
         log += str(out)
     except subprocess.CalledProcessError:
         pass
 
 def addFile(fileP):
+    printOnScreen(fileP, 'f')
     addTextInFrame('File: ' + fileP)
     if _ifFileExists(fileP):
-        addCommand('cat ' + fileP, False)
+        global log
+        with open(fileP, 'r') as myfile:
+            log += myfile.read()
+
 
 def addDir(directory):
+    printOnScreen(directory, 'd')
     addTextInFrame('Directory: ' + directory)
     if _ifDirExists(directory):
         files = _getRecoursiveFileList(directory)
@@ -54,6 +81,7 @@ def addDir(directory):
             addFile(myfile)
 
 def addDirList(directory):
+    printOnScreen(directory, 'd')
     addTextInFrame('Directory list: ' + directory)
     global log
     files = _getRecoursiveFileList(directory)
