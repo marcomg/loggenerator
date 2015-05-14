@@ -28,7 +28,7 @@ def _ifDirExists(dirname):
 # Deletes options (if any) from a command
 # Returns only command 
 def stripOptions(string):
-    command = re.search('(.*) +', string)
+    command = re.search('(.*) *', string)
     return command.group(0)
 
 
