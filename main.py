@@ -34,9 +34,9 @@ problem = simpleprompt.multiChoose(programStrings.menuItemsStrings,
 # 0 esci
 if problem == 0:
     exit()
-    
+
 # 7 commons (da eseguire sempre tranne che allo 0) e altro tipo di problemi
-if problem in [1, (len(programStrings.menuItemsStrings)) - 1]:
+if 1 <= problem <= len(programStrings.menuItemsStrings)-1:
     loggenerator.addTextInFrame('Log creato ' + time.ctime())
     loggenerator.addTextInFrame('Produttore:')
     loggenerator.addFile('/sys/class/dmi/id/sys_vendor')
