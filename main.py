@@ -4,31 +4,36 @@ import sys
 import os
 import getpass
 import time
+import lzma
+import logfile
 
 # Personal library
 sys.path.append('libs')  # questa linea solo se non pacchettizato
-import programStrings
+import constants
 import pastedebian
 import simpleprompt
 import loggenerator
 import fileHandler
 
+# Clear screen
+os.system('clear')
+
 # Intro
-print(programStrings.programIntroString)
+print(constants.programIntroString)
 
 # Chiedo conferma
-print(programStrings.programAdviceStrings)
+print(constants.programAdviceStrings)
 if not simpleprompt.boolQuestionY('Continuare?'):
     exit()
 
 # Controllo di essere root
 if getpass.getuser() != 'root':
-    print('Errore: lo script deve essere lanciato da root.')
+    print(constants.errorStringRoot)
     exit()
 
 # Seleziono il tipo di problema
-problem = simpleprompt.multiChoose(programStrings.menuItemsStrings,
-                                   programStrings.menuItemsQuestion)
+problem = simpleprompt.multiChoose(constants.menuItemsStrings,
+                                   constants.menuItemsQuestion)
 
 # Genero i log
 # 0 esci
@@ -36,7 +41,7 @@ if problem == 0:
     exit()
 
 # 7 commons (da eseguire sempre tranne che allo 0) e altro tipo di problemi
-if 1 <= problem <= len(programStrings.menuItemsStrings)-1:
+if 1 <= problem <= len(constants.menuItemsStrings)-1:
     loggenerator.addTextInFrame('Log creato ' + time.ctime())
     loggenerator.addTextInFrame('Produttore:')
     loggenerator.addFile('/sys/class/dmi/id/sys_vendor')
@@ -147,11 +152,8 @@ elif problem == 6:
     loggenerator.addCommand('/usr/bin/synclient -l')
 
 
-# Log file name based on the current date
-fileLogName = 'log-' + time.strftime("%d%m%Y-%H%M%S")
-
 # myfile is an object of the class "fileOps" in fileHandler(.py) module
-myfile = fileHandler.fileOps(fileLogName)
+myfile = fileHandler.fileOps(constants.fileLogName)
 myfile.go()
 
 # Invio i logs a paste.debian.net
@@ -169,3 +171,21 @@ if simpleprompt.boolQuestion('Vuoi inviare i logs su paste.debian.net?'):
     print('invio completato. I links sono:')
     for link in links:
         print(link)
+        
+        
+# Log compression
+if simpleprompt.boolQuestionY('Creare un file compresso del log?'):
+    with open(constants.fileLogName, 'rb') as logfile:
+        compressData = logfile.read()
+        with lzma.open(constants.compFileLogName, 'w') as complogfile:
+            complogfile.write(compressData)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+       
