@@ -3,6 +3,7 @@ import os
 import os.path
 import re
 import shutil
+import constants
 
 def _getRecoursiveFileList(rootdir):
     fileList = []
@@ -57,8 +58,12 @@ def addCommand(command, h=True):
     try:
         command1 = stripOptions(command)
         if shutil.which(command1) != 'None':
-            out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
-            log += str(out)
+            if command == 'groups':
+                out = subprocess.check_output('su ' + constants.utente + ' -c ' + command, shell=True, universal_newlines=True, stderr=trash)
+                log += str(out)
+            else:
+                out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
+                log += str(out)
     except subprocess.CalledProcessError:
         pass
 
