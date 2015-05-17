@@ -5,7 +5,6 @@ import os
 import getpass
 import time
 import lzma
-import logfile
 
 # Personal library
 sys.path.append('libs')  # questa linea solo se non pacchettizato
@@ -153,7 +152,7 @@ elif problem == 6:
 
 
 # myfile is an object of the class "fileOps" in fileHandler(.py) module
-myfile = fileHandler.fileOps(constants.fileLogName)
+myfile = fileHandler.FileOps(constants.fileLogName)
 myfile.go()
 
 # Invio i logs a paste.debian.net
