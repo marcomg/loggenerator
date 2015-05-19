@@ -48,34 +48,12 @@ if 1 <= problem <= len(constants.menuItemsStrings)-1:
     
 # 1 problemi relativi alle connessioni di rete
 if problem == 1:
-    loggenerator.addFile('/etc/network/interfaces')
-    loggenerator.addFile('/etc/hosts')
-    loggenerator.addCommand('ifconfig')
-    loggenerator.addCommand('ifconfig -a')
-    loggenerator.addCommand('rfkill list all')
-    loggenerator.addCommand('ping -c3 8.8.8.8')  # DNS di Google 8.8.8.8
-    loggenerator.addCommand('ip addr')
-    loggenerator.addCommand('ip route list')
-    loggenerator.addCommand('iwconfig')
-    loggenerator.addCommand('iwlist scan')
-    loggenerator.addCommand('route -n')
-    loggenerator.isPackageInstalled('resolvconf')
-    loggenerator.addFile('/etc/resolv.conf')
-    loggenerator.isPackageInstalled('DHCP')
-    loggenerator.addFile('/etc/dhclient.conf')
-    loggenerator.isDeamonRunning('network-manager')
-    loggenerator.isDeamonRunning('wicd')
+    myProblem.commandsNetwork()
+    
 # 2 problemi video
 elif problem == 2:
-    loggenerator.addFile('/etc/X11/xorg.conf')
-    loggenerator.addDir('/etc/X11/xorg.conf.d/')
-    loggenerator.addFile('/var/log/Xorg.0.log')
-    loggenerator.addCommand('dkms status')
-    loggenerator.isPackageInstalled('xserver-xorg')
-    loggenerator.isPackageInstalled('nouveau')
-    loggenerator.isPackageInstalled('nvidia')
-    loggenerator.isPackageInstalled('mesa')
-    loggenerator.isPackageInstalled('fglrx')
+    myProblem.commandsVideo()
+    
 # 3 problemi audio
 elif problem == 3:
     loggenerator.isPackageInstalled('alsa')
@@ -92,21 +70,18 @@ ALSA prelevabile all'indirizzo: ''' + alsaurl)
         print('Esecuzione script')
         loggenerator.addCommand('./alsa-info.sh --stdout')
         os.remove('alsa-info.sh')
+        
 # 4 problemi di gestione dei pacchetti (APT)
 elif problem == 4:
     myProblem.commandsAPT()
+    
 # 5 problemi di mount/unmount
 elif problem == 5:
-    loggenerator.addCommand('udisks --dump')
-    loggenerator.isPackageInstalled('usbmount')
+    myProblem.commandsMount()
+    
 # 6 problemi di funzionamento del touchpad
 elif problem == 6:
-    loggenerator.isPackageInstalled('xserver-xorg')
-    loggenerator.isPackageInstalled('touchpad')
-    loggenerator.addFile('/etc/X11/xorg.conf')
-    loggenerator.addDir('/etc/X11/xorg.conf.d/')
-    loggenerator.addFile('/var/log/Xorg.0.log')
-    loggenerator.addCommand('/usr/bin/synclient -l')
+    myProblem.commandsTouchpad()
 
 
 # myfile is an object of the class "fileOps" in fileHandler(.py) module
