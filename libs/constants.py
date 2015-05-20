@@ -3,6 +3,7 @@
 
 import os
 import time
+import socket
 
 # Constant strings
 
@@ -44,6 +45,9 @@ errorStringRoot = 'Errore: lo script deve essere lanciato da root.'
 
 # username (!= root)
 utente = os.getlogin()
+
+# hostname
+nomehost = socket.gethostname()
 
 
 # Log file name based on the current date
