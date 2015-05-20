@@ -6,11 +6,8 @@ import shutil
 import constants
 
 class functions():
+    log = ''
     
-    def __init__(self):
-        self.log = ''
-        
-        
     def _getRecoursiveFileList(self, rootdir):
         fileList = []
         for root, subFolders, files in os.walk(rootdir):
@@ -51,7 +48,7 @@ class functions():
     
     def addTextInFrame(self, text):
         leng = len(text)
-        self.log += "\n" + text + "\n" + '-' * leng + "\n"
+        self.__class__.log += "\n" + text + "\n" + '-' * leng + "\n"
     
     def addCommand(self, command, h=True):
         self.printOnScreen(command, 'c')
@@ -63,10 +60,10 @@ class functions():
             if shutil.which(command1) != 'None':
                 if command == 'groups':
                     out = subprocess.check_output('su ' + constants.utente + ' -c ' + command, shell=True, universal_newlines=True, stderr=trash)
-                    self.log += str(out)
+                    self.__class__.log += str(out)
                 else:
                     out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
-                    self.log += str(out)
+                    self.__class__.log += str(out)
         except subprocess.CalledProcessError:
             pass
     
@@ -76,7 +73,7 @@ class functions():
         if self._ifFileExists(fileP):
             with open(fileP, 'r') as myfile:
                 content = myfile.read()                                     # file content in a variable
-                                   
+            
                 # syslog
                 if fileP == '/var/log/syslog':
                     myre = re.compile('.*rsyslogd.*start')                  # regular expression (RE)
@@ -93,11 +90,13 @@ class functions():
                             string1 = content                               # string1 contains entire syslog 
     
                          
-                    self.log = ''.join((log, header, string2, string1))          # join four strings
+                    self.__class__.log = ''.join((self.__class__.log, header, string2, string1))          # join four strings
                 
                 # all other files   
                 else:
-                    self.log = ''.join((log, content))
+                    self.__class__.log = ''.join((self.__class__.log, content))
+        else:
+            self.__class__.log = ''.join((self.__class__.log, 'File non trovato\n'))
     
     
     def addDir(self, directory):
@@ -113,7 +112,7 @@ class functions():
         self.addTextInFrame('Directory list: ' + directory)
         files = self._getRecoursiveFileList(directory)
         for tfile in files:
-            self.log += tfile + "\n"
+            self.__class__.log += tfile + "\n"
     
     def isPackageInstalled(self, package):
         self.addCommand('dpkg -l | grep -i "%s"' % (package))
@@ -123,4 +122,4 @@ class functions():
         self.addCommand('invoke-rc.d "%s" status' % (deamon), False)
     
     def getLogFile(self):
-        return self.log
+        return self.__class__.log
