@@ -32,8 +32,8 @@ class functions():
     # Deletes options (if any) from a command
     # Returns only command 
     def stripOptions(self, string):
-        command = re.search('(.*) *', string)
-        return command.group(0)
+        command = string.split()[0]
+        return command
     
     
     # Output message based on the second parameter
@@ -56,14 +56,28 @@ class functions():
         if h:
             self.addTextInFrame('Command: ' + command)
         try:
-            command1 = self.stripOptions(command)
-            if shutil.which(command1) != 'None':
+            command1 = self.stripOptions(command) # raw command (without options/pipe)
+            if shutil.which(command1) is not None:      # command exists?
+                
+                # groups
                 if command == 'groups':
                     out = subprocess.check_output('su ' + constants.utente + ' -c ' + command, shell=True, universal_newlines=True, stderr=trash)
-                    self.__class__.log += str(out)
+                    
+                # iwconfig or iwlist scan - hide ESSID
+                if command == 'iwconfig' or command == 'iwlist scan':
+                    out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
+                    out = re.sub('ESSID:.*', 'ESSID: *script removed*', str(out))
+                   
+                # all other commands
                 else:
                     out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
-                    self.__class__.log += str(out)
+
+                # append output to the log
+                self.__class__.log = ''.join((self.__class__.log,  str(out)))
+                           
+            else:
+                self.__class__.log = ''.join((self.__class__.log,  'Comando non trovato\n'))
+                
         except subprocess.CalledProcessError:
             pass
     
@@ -72,25 +86,31 @@ class functions():
         self.addTextInFrame('File: ' + fileP)
         if self._ifFileExists(fileP):
             with open(fileP, 'r') as myfile:
-                content = myfile.read()                                     # file content in a variable
+                content = myfile.read()                                                                 # file content in a variable
             
-                # syslog
+                # /var/log/syslog
                 if fileP == '/var/log/syslog':
-                    myre = re.compile('.*rsyslogd.*start')                  # regular expression (RE)
+                    myre = re.compile('.*rsyslogd.*start')                                      # regular expression (RE)
                     try:
-                        header = myre.findall(content)[-1]                  # search the last occurence [-1] of previous RE
-                        string1 = myre.split(content)[-1]                   # last block (from 'header' to the end of file)
-                        string2=''                                          # syslog.1 not considered
+                        header = myre.findall(content)[-1]                                        # search the last occurence [-1] of previous RE
+                        string1 = myre.split(content)[-1]                                            # last block (from 'header' to the end of file)
+                        string2=''                                                                                # syslog.1 not considered
                         
-                    except IndexError:                                      # RE can't match anything    
-                        with open('/var/log/syslog.1', 'r') as myfile2:     # open syslog.1 
-                            content2 = myfile2.read()                       # syslog.1 content in a variable
+                    except IndexError:                                                                      # RE can't match anything    
+                        with open('/var/log/syslog.1', 'r') as myfile2:                           # open syslog.1 
+                            content2 = myfile2.read()                                                   # syslog.1 content in a variable
                             header = myre.findall(content2)[-1]             
                             string2 = myre.split(content2)[-1]
-                            string1 = content                               # string1 contains entire syslog 
-    
+                            string1 = content                                                                               #string1 contains entire syslog
                          
-                    self.__class__.log = ''.join((self.__class__.log, header, string2, string1))          # join four strings
+                    self.__class__.log = ''.join((self.__class__.log, header, string2, string1))    # join four strings
+                
+                # /etc/network/interfaces - hide ESSID/passphrase
+                if fileP == '/etc/network/interfaces':
+                    content = re.sub('wpa-ssid.*', 'wpa-ssid *script removed*', content)
+                    content = re.sub('wpa-psk.*', 'wpa-psk *script removed*', content)
+                    
+                    self.__class__.log = ''.join((self.__class__.log, content))
                 
                 # all other files   
                 else:
