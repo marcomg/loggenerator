@@ -86,22 +86,22 @@ class functions():
         self.addTextInFrame('File: ' + fileP)
         if self._ifFileExists(fileP):
             with open(fileP, 'r') as myfile:
-                content = myfile.read()                                                                 # file content in a variable
+                content = myfile.read()                                                         # file content in a variable
             
                 # /var/log/syslog
                 if fileP == '/var/log/syslog':
                     myre = re.compile('.*rsyslogd.*start')                                      # regular expression (RE)
                     try:
-                        header = myre.findall(content)[-1]                                        # search the last occurence [-1] of previous RE
-                        string1 = myre.split(content)[-1]                                            # last block (from 'header' to the end of file)
-                        string2=''                                                                                # syslog.1 not considered
+                        header = myre.findall(content)[-1]                                      # search the last occurence [-1] of previous RE
+                        string1 = myre.split(content)[-1]                                       # last block (from 'header' to the end of file)
+                        string2=''                                                              # syslog.1 not considered
                         
-                    except IndexError:                                                                      # RE can't match anything    
-                        with open('/var/log/syslog.1', 'r') as myfile2:                           # open syslog.1 
-                            content2 = myfile2.read()                                                   # syslog.1 content in a variable
+                    except IndexError:                                                          # RE can't match anything    
+                        with open('/var/log/syslog.1', 'r') as myfile2:                         # open syslog.1 
+                            content2 = myfile2.read()                                           # syslog.1 content in a variable
                             header = myre.findall(content2)[-1]             
                             string2 = myre.split(content2)[-1]
-                            string1 = content                                                                               #string1 contains entire syslog
+                            string1 = content                                                   #string1 contains entire syslog
                          
                     self.__class__.log = ''.join((self.__class__.log, header, string2, string1))    # join four strings
                 
