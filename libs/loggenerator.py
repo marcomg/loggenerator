@@ -56,15 +56,22 @@ class functions():
         if h:
             self.addTextInFrame('Command: ' + command)
         try:
-            command1 = self.stripOptions(command) # raw command (without options/pipe)
+            command1 = self.stripOptions(command)       # raw command (without options/pipe)
             if shutil.which(command1) is not None:      # command exists?
                 
+                # dmesg -- err or dmesg -l warn
+                if command == 'dmesg -l err' or command == 'dmesg -l warn':         # dmesg -l {err, warn} only without systemd (SYSTEMD variable in 'constants' module)
+                    if not constants.SYSTEMD:
+                        out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
+                    else:
+                        out=''
+                
                 # groups
-                if command == 'groups':
+                elif command == 'groups':
                     out = subprocess.check_output('su ' + constants.utente + ' -c ' + command, shell=True, universal_newlines=True, stderr=trash)
                     
                 # iwconfig or iwlist scan - hide ESSID
-                if command == 'iwconfig' or command == 'iwlist scan':
+                elif command == 'iwconfig' or command == 'iwlist scan':
                     out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
                     out = re.sub('ESSID:.*', 'ESSID: *script removed*', str(out))
                    
@@ -90,23 +97,24 @@ class functions():
             
                 # /var/log/syslog
                 if fileP == '/var/log/syslog':
-                    myre = re.compile('.*rsyslogd.*start')                                      # regular expression (RE)
-                    try:
-                        header = myre.findall(content)[-1]                                      # search the last occurence [-1] of previous RE
-                        string1 = myre.split(content)[-1]                                       # last block (from 'header' to the end of file)
-                        string2=''                                                              # syslog.1 not considered
-                        
-                    except IndexError:                                                          # RE can't match anything    
-                        with open('/var/log/syslog.1', 'r') as myfile2:                         # open syslog.1 
-                            content2 = myfile2.read()                                           # syslog.1 content in a variable
-                            header = myre.findall(content2)[-1]             
-                            string2 = myre.split(content2)[-1]
-                            string1 = content                                                   #string1 contains entire syslog
-                         
-                    self.__class__.log = ''.join((self.__class__.log, header, string2, string1))    # join four strings
+                    if not constants.SYSTEMD:                                                       # syslog only without systemd (SYTEMD variable in 'constants' module)
+                        myre = re.compile('.*rsyslogd.*start')                                      # regular expression (RE)
+                        try:
+                            header = myre.findall(content)[-1]                                      # search the last occurence [-1] of previous RE
+                            string1 = myre.split(content)[-1]                                       # last block (from 'header' to the end of file)
+                            string2=''                                                              # syslog.1 not considered
+                            
+                        except IndexError:                                                          # RE can't match anything    
+                            with open('/var/log/syslog.1', 'r') as myfile2:                         # open syslog.1 
+                                content2 = myfile2.read()                                           # syslog.1 content in a variable
+                                header = myre.findall(content2)[-1]             
+                                string2 = myre.split(content2)[-1]
+                                string1 = content                                                   #string1 contains entire syslog
+                             
+                        self.__class__.log = ''.join((self.__class__.log, header, string2, string1))    # join four strings
                 
                 # /etc/network/interfaces - hide ESSID/passphrase
-                if fileP == '/etc/network/interfaces':
+                elif fileP == '/etc/network/interfaces':
                     content = re.sub('wpa-ssid.*', 'wpa-ssid *script removed*', content)
                     content = re.sub('wpa-psk.*', 'wpa-psk *script removed*', content)
                     
@@ -139,7 +147,7 @@ class functions():
     
     def isDeamonRunning(self, deamon):
         self.addTextInFrame('Deamon: ' + deamon)
-        self.addCommand('invoke-rc.d "%s" status' % (deamon), False)
+        self.addCommand('service "%s" status' % (deamon), False)
     
     def getLogFile(self):
         return self.__class__.log

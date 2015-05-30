@@ -2,6 +2,7 @@
 # Constant string are in programStrings.py
 
 import os
+import os.path
 import time
 import socket
 
@@ -56,5 +57,11 @@ fileLogName = 'log-' + time.strftime("%d%m%Y-%H%M%S")
 
 # Compressed file name (.xz)
 compFileLogName = fileLogName + '.xz'
+
+# Check whether systemd is running
+if os.path.isdir('/run/systemd/system'):
+    SYSTEMD = True
+else:
+    SYSTEMD = False
 
 

@@ -2,6 +2,8 @@
 
 import time
 import loggenerator
+import simpleprompt
+import os
 
 class problem():
     
@@ -40,6 +42,13 @@ class problem():
         self.myloggenerator.addCommand('xfce4-about | head -n1 | cut -d " " -f2')
         self.myloggenerator.addFile('/etc/X11/default-display-manager')
         self.myloggenerator.addCommand('groups')
+        self.myloggenerator.addCommand('systemctl --failed')
+        self.myloggenerator.addCommand('journalctl -x -b --no-pager') 
+        self.myloggenerator.addCommand('journalctl -x -b --no-pager -p err')
+        self.myloggenerator.addCommand('journalctl -x -b --no-pager -p warning')
+        self.myloggenerator.addCommand('systemd-delta')
+        self.myloggenerator.addCommand('systemd-cgtop --no-pager')
+        self.myloggenerator.addCommand('systemd-cgls --no-pager')
         self.myloggenerator.addFile('/var/log/syslog')
         self.myloggenerator.addCommand('dmesg -l err')
         self.myloggenerator.addCommand('dmesg -l warn')
@@ -101,5 +110,22 @@ class problem():
         self.myloggenerator.addDir('/etc/X11/xorg.conf.d/')
         self.myloggenerator.addFile('/var/log/Xorg.0.log')
         self.myloggenerator.addCommand('/usr/bin/synclient -l')
+        
+    def commandsAudio(self):
+        self.myloggenerator.isPackageInstalled('alsa')
+        self.myloggenerator.isPackageInstalled('pulseaudio')
+        
+        alsaurl = 'http://www.alsa-project.org/alsa-info.sh'
+        print('''I log relativi ai problemi audio sono ricavati attraverso lo script di debug ALSA prelevabile all'indirizzo: ''' + alsaurl)
+        if simpleprompt.boolQuestionY('Verrà ora scaricato e eseguito lo script ALSA. Continuare?'):
+            try:
+                os.remove('alsa-info.sh')
+            except FileNotFoundError:
+                pass
+            os.system('wget -q ' + alsaurl)
+            os.chmod('alsa-info.sh', 777)
+            print('Esecuzione script')
+            self.myloggenerator.addCommand('./alsa-info.sh --stdout')
+            os.remove('alsa-info.sh')
     
         
