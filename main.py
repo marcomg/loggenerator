@@ -56,20 +56,7 @@ elif problem == 2:
     
 # 3 problemi audio
 elif problem == 3:
-    loggenerator.isPackageInstalled('alsa')
-    alsaurl = 'http://www.alsa-project.org/alsa-info.sh'
-    print('''I log relativi ai problemi audio sono ricavati attraverso lo script di debug
-ALSA prelevabile all'indirizzo: ''' + alsaurl)
-    if simpleprompt.boolQuestionY('Verrà ora scaricato e eseguito lo script ALSA. Continuare?'):
-        try:
-            os.remove('alsa-info.sh')
-        except FileNotFoundError:
-            pass
-        os.system('wget ' + alsaurl)
-        os.chmod('alsa-info.sh', 777)
-        print('Esecuzione script')
-        loggenerator.addCommand('./alsa-info.sh --stdout')
-        os.remove('alsa-info.sh')
+    myProblem.commandsAudio()
         
 # 4 problemi di gestione dei pacchetti (APT)
 elif problem == 4:
