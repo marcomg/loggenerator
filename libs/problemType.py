@@ -68,6 +68,7 @@ class problem():
         self.myloggenerator.addDirList('/usr/local/lib/firmware')
         self.myloggenerator.addDirList('/lib/firmware')
         self.myloggenerator.addDirList('/run/udev/firmware-missing')
+        self.myloggenerator.externalPackages()
         
     def commandsNetwork(self):
         self.myloggenerator.addFile('/etc/network/interfaces')
