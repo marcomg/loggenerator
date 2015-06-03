@@ -44,6 +44,9 @@ menuItemsQuestion = 'Select a number: '
 errorStringRoot = 'Errore: lo script deve essere lanciato da root.'
 
 
+# Words in this list are not hidden if they represent the current username/hostname
+passList = ['Debian', 'debian', 'deb']
+
 # username (!= root)
 utente = os.getlogin()
 
