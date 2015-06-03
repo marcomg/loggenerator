@@ -25,16 +25,21 @@ class FileOps():
         os.chmod(self.filename, 666)
         
     # hide away the username and hostname from log file
+    # only whether username/hostname aren't in constants.passList list
     def hide(self):
         myloggenerator = loggenerator.functions()
         myvar = myloggenerator.getLogFile()
-        myvar = re.sub(r'\b' + constants.utente + r'\b', 'nomeutente', myvar)
-        myvar = re.sub(r'\b' + constants.nomehost + r'\b', 'nomehost', myvar)
+        
+        if constants.utente not in constants.passList:
+            myvar = re.sub(r'\b' + constants.utente + r'\b', 'nomeutente', myvar)
+            
+        if constants.nomehost not in constants.passList:
+            myvar = re.sub(r'\b' + constants.nomehost + r'\b', 'nomehost', myvar)
+            
         return myvar
         
     def go(self):
         self.open()
-        self.hide()
         self.write()
         self.close()
         self.chmod()
