@@ -37,13 +37,16 @@ class functions():
     
     
     # Output message based on the second parameter
+    # f->file, d->directory, c->command. s->generic string
     def printOnScreen(self, string, type):
         if type == 'f':
             print('File: ' + string)
         elif type == 'd':
             print('Directory: ' + string)
         elif type == 'c':
-            print('Comando: ' + string) 
+            print('Comando: ' + string)
+        elif type == 's':
+            print(string)
     
     
     def addTextInFrame(self, text):
@@ -59,7 +62,7 @@ class functions():
             command1 = self.stripOptions(command)       # raw command (without options/pipe)
             if shutil.which(command1) is not None:      # command exists?
                 
-                # dmesg -- err or dmesg -l warn
+                # dmesg -l err or dmesg -l warn
                 if command == 'dmesg -l err' or command == 'dmesg -l warn':         # dmesg -l {err, warn} only without systemd (SYSTEMD variable in 'constants' module)
                     if not constants.SYSTEMD:
                         out = subprocess.check_output(command, shell=True, universal_newlines=True, stderr=trash)
@@ -148,6 +151,37 @@ class functions():
     def isDeamonRunning(self, deamon):
         self.addTextInFrame('Deamon: ' + deamon)
         self.addCommand('service "%s" status' % (deamon), False)
+        
+    def externalPackages(self):
+        self.printOnScreen('Pacchetti esterni', 's')
+        self.addTextInFrame('Pacchetti esterni')
+        
+        # variable that contains "apt-cache policy" output
+        aptcachepol = str(subprocess.check_output('apt-cache policy', shell=True, universal_newlines=True))
+
+        # extract release(s) and remove duplicates
+        release = list(set((re.findall('(?<=n=)(.*?)(?=,)', aptcachepol, flags=re.MULTILINE))))
+
+        # list length - number of elements 
+        num = len(release)
+        
+        if num == 1:
+            if release[0] == 'jessie':
+                output = str(subprocess.check_output("aptitude -F '%p %v %t' search '~S ~i !~Astable' --disable-columns | column -t", shell=True, universal_newlines=True))
+            if release[0] == 'stretch':
+                output = str(subprocess.check_output("aptitude -F '%p %v %t' search '~S ~i !~Atesting' --disable-columns | column -t", shell=True, universal_newlines=True))
+            if release[0] == 'sid':
+                output = str(subprocess.check_output("aptitude -F '%p %v %t' search '~S ~i !~Aunstable' --disable-columns | column -t", shell=True, universal_newlines=True))
+            
+        elif num == 0:
+            output = 'ERRORE! Nessuna release trovata.'
+        
+        else:
+            output = 'Sono state trovate ' + num + ' release.'
+            
+        # append output to the log
+        self.__class__.log = ''.join((self.__class__.log, output))
+                
     
     def getLogFile(self):
         return self.__class__.log
