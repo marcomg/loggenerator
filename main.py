@@ -15,6 +15,20 @@ import loggenerator
 import fileHandler
 import problemType
 
+# exit function
+def programExit():
+    if os.path.isfile(constants.fileLogName):
+        print('Il file di log é: ' + constants.fileLogName)
+    else:
+        print('Nessun file di log creato')
+        
+    if os.path.isfile(constants.compFileLogName):
+        print('Il file compresso é: ' + constants.compFileLogName)
+    else:
+        print('Nessun file compresso del log creato')
+        
+    exit()
+
 # Clear screen
 os.system('clear')
 
@@ -24,12 +38,12 @@ print(constants.programIntroString)
 # Chiedo conferma
 print(constants.programAdviceStrings)
 if not simpleprompt.boolQuestionY('Continuare?'):
-    exit()
+    programExit()
 
 # Controllo di essere root
 if getpass.getuser() != 'root':
     print(constants.errorStringRoot)
-    exit()
+    programExit()
 
 # Seleziono il tipo di problema
 problem = simpleprompt.multiChoose(constants.menuItemsStrings,
@@ -38,7 +52,7 @@ problem = simpleprompt.multiChoose(constants.menuItemsStrings,
 # Genero i log
 # 0 esci
 if problem == 0:
-    exit()
+    programExit()
     
 myProblem = problemType.problem()
 
@@ -98,6 +112,9 @@ if simpleprompt.boolQuestionY('Creare un file compresso del log?'):
         compressData = logfile.read()
         with lzma.open(constants.compFileLogName, 'w') as complogfile:
             complogfile.write(compressData)
+            
+            
+programExit()            
     
     
     
