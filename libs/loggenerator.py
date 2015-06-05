@@ -177,7 +177,7 @@ class functions():
             output = 'ERRORE! Nessuna release trovata.'
         
         else:
-            output = 'Sono state trovate ' + num + ' release.'
+            output = 'Sono state trovate ' + str(num) + ' release.'
             
         # append output to the log
         self.__class__.log = ''.join((self.__class__.log, output))
