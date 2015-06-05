@@ -160,18 +160,26 @@ class functions():
         aptcachepol = str(subprocess.check_output('apt-cache policy', shell=True, universal_newlines=True))
 
         # extract release(s) and remove duplicates
-        release = list(set((re.findall('(?<=n=)(.*?)(?=,)', aptcachepol, flags=re.MULTILINE))))
+        release = set((re.findall('(?<=n=)(.*?)(?=,)', aptcachepol, flags=re.MULTILINE)))
 
+        # remove lines that are not in constants.releases
+        release = filter(lambda rel: rel in constants.releases, release)
+        
+        # set-to-list conversion
+        release = list(release)
+        
         # list length - number of elements 
         num = len(release)
         
         if num == 1:
-            if release[0] == 'jessie':
+            if release[0] == constants.stable:
                 output = str(subprocess.check_output("aptitude -F '%p %v %t' search '~S ~i !~Astable' --disable-columns | column -t", shell=True, universal_newlines=True))
-            if release[0] == 'stretch':
+            elif release[0] == constants.testing:
                 output = str(subprocess.check_output("aptitude -F '%p %v %t' search '~S ~i !~Atesting' --disable-columns | column -t", shell=True, universal_newlines=True))
-            if release[0] == 'sid':
+            elif release[0] == 'sid':
                 output = str(subprocess.check_output("aptitude -F '%p %v %t' search '~S ~i !~Aunstable' --disable-columns | column -t", shell=True, universal_newlines=True))
+            else:
+                output = 'Release non gestita'
             
         elif num == 0:
             output = 'ERRORE! Nessuna release trovata.'

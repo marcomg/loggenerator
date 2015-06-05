@@ -43,6 +43,15 @@ menuItemsQuestion = 'Select a number: '
 
 errorStringRoot = 'Errore: lo script deve essere lanciato da root.'
 
+# suite/codename correspondence
+stable = 'jessie'
+testing = 'stretch'
+
+# accepted releases during search of external packages
+# read above for stable/testing value
+releases = ['sid']
+releases.append(stable)
+releases.append(testing)
 
 # Words in this list are not hidden if they represent the current username/hostname
 passList = ['Debian', 'debian', 'deb']
